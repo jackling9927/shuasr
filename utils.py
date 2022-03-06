@@ -1016,6 +1016,25 @@ def test(config_path, logs_path):
     return True
 
 
+def showIP():
+    apis = {
+        'SHU IP': 'http://speedtest.shu.edu.cn/backend/getIP.php?isp=true',
+        'SJTU IP': 'https://mirror.sjtu.edu.cn/speedtest/getIP?isp=true',
+        'Oversea IP': 'https://de5.backend.librespeed.org/getIP.php?isp=true',
+    }
+
+    for api_name in apis:
+        try:
+            raw_ip = requests.get(apis[api_name]).json()
+            ip = raw_ip['rawIspInfo']
+            ip.update({'ip': '******'})
+            print("%s Info: " % api_name)
+            print(ip)
+        except Exception as e:
+            print(e)
+            print('Get %s Info Fail' % api_name)
+
+
 def github(get_config=None):
     users = os.environ['users'].split(';')
     send = os.environ.get('send', '').split(',')
@@ -1025,6 +1044,7 @@ def github(get_config=None):
         elif get_config == 'p':
             print(users[0].split(',')[1])
         return
+    showIP()
     updateRiskArea()
     post_day = getTime().strftime("%Y-%m-%d")
     suc_log = []
