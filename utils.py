@@ -1040,7 +1040,6 @@ def showIP():
 
 
 def github(get_config=None):
-    print('GitHub Start')
     users = os.environ['users'].split(';')
     send = os.environ.get('send', '').split(',')
     if get_config is not None:
@@ -1049,6 +1048,7 @@ def github(get_config=None):
         elif get_config == 'p':
             print(users[0].split(',')[1])
         return
+    print('GitHub Start')
     showIP()
     updateRiskArea()
     post_day = getTime().strftime("%Y-%m-%d")
