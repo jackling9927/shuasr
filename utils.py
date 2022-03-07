@@ -1040,6 +1040,7 @@ def showIP():
 
 
 def github(get_config=None):
+    print('GitHub Start')
     users = os.environ['users'].split(';')
     send = os.environ.get('send', '').split(',')
     if get_config is not None:
