@@ -1027,7 +1027,10 @@ def showIP():
         try:
             raw_ip = requests.get(apis[api_name]).json()
             ip = raw_ip['rawIspInfo']
-            ip.update({'ip': '******'})
+            if len(ip) == 0:
+                ip = raw_ip
+            else:
+                ip.update({'ip': '******'})
             print("%s Info: " % api_name)
             print(ip)
         except Exception as e:
