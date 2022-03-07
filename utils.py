@@ -1018,14 +1018,15 @@ def test(config_path, logs_path):
 
 def showIP():
     apis = {
-        'SHU IP': 'http://speedtest.shu.edu.cn/backend/getIP.php?isp=true',
-        'SJTU IP': 'https://mirror.sjtu.edu.cn/speedtest/getIP?isp=true',
         'Oversea IP': 'https://de5.backend.librespeed.org/getIP.php?isp=true',
+        'SJTU IP': 'https://mirror.sjtu.edu.cn/speedtest/getIP?isp=true',
+        'SHU IP': 'http://speedtest.shu.edu.cn/backend/getIP.php?isp=true',
     }
 
     for api_name in apis:
+        print(api_name)
         try:
-            raw_ip = requests.get(apis[api_name]).json()
+            raw_ip = requests.get(apis[api_name], timeout=60).json()
             ip = raw_ip['rawIspInfo']
             if len(ip) == 0:
                 ip = raw_ip
