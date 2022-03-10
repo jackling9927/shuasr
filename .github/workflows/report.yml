@@ -30,14 +30,14 @@ jobs:
           sudo openvpn --config ".github/vpn/config.ovpn" --log "vpn.log" --daemon
       - name: Test a VPN connection
         if: always()
-        timeout-minutes: 1
+        timeout-minutes: 3
         run: until ping -c1 xk.autoisp.shu.edu.cn; do sleep 2; done
       - name: Report Start
         if: always()
         env:
           users: ${{ secrets.USERS }}
           send: ${{ secrets.SEND }}
-        run: "python main.py gh-test"
+        run: "python main.py gh"
       - name: Kill VPN connection
         if: always()
         run: |

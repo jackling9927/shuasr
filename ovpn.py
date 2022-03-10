@@ -3,8 +3,12 @@ SHU_DOMAINS = [
     'speedtest.shu.edu.cn',
     'selfreport.shu.edu.cn',
     'newsso.shu.edu.cn',
+    'oauth.shu.edu.cn',
+    'services.shu.edu.cn',
     'xk.autoisp.shu.edu.cn',
+    'xk.shu.edu.cn',
 ]
+SHU_IPS = []
 
 
 def get_ip(domain):
@@ -13,6 +17,7 @@ def get_ip(domain):
 
 
 def config_ovpn():
+    global SHU_IPS
     users = os.environ['users'].split(';')
     user = users[0].split(',')
     secret = user[0] + "\n" + user[1]
@@ -24,8 +29,12 @@ def config_ovpn():
     max-routes 1000
     """
     for domain in SHU_DOMAINS:
+        SHU_IPS.append(get_ip(domain))
+    SHU_IPS = list(set(SHU_IPS))
+    for ip in SHU_IPS:
         routing_config += "\n"
-        routing_config += "route %s 255.255.255.255" % get_ip(domain)
+        routing_config += "route %s 255.255.255.255" % ip
+    print(routing_config)
 
     with open('.github/vpn/config.ovpn', 'r') as f:
         content = f.read()
