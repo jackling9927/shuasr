@@ -1017,6 +1017,7 @@ def test(config_path, logs_path):
 
 
 def showIP():
+    print("开始输出 IP 地址信息......")
     apis = {
         'Oversea IP': 'https://de5.backend.librespeed.org/getIP.php?isp=true',
         'SJTU IP': 'https://mirror.sjtu.edu.cn/speedtest/getIP?isp=true',
@@ -1043,6 +1044,7 @@ def github():
     send = os.environ.get('send', '').split(',')
     showIP()
     updateRiskArea()
+    print("GitHub Actions 填报开始，若为第一次使用时间可能较长，请耐心等待......")
     post_day = getTime().strftime("%Y-%m-%d")
     suc_log = []
     xc_log = []
@@ -1050,12 +1052,14 @@ def github():
     read_msg_results = []
     i = 1
     for user_info in users:
+        print("\n===============")
+        print("正在为第%s位用户填报......" % i)
         username, password = user_info.split(',')
         session = login(username, password)
         if session:
             read_msg_result = readUnreadMsg(session)
             if read_msg_result['result'] != '':
-                print('%s: %s' % (i, read_msg_result['result']))
+                print('用户%s: %s' % (i, read_msg_result['result']))
             i += 1
             read_msg_result['username'] = username
             read_msg_results.append(read_msg_result)
