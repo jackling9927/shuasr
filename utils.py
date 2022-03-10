@@ -1026,7 +1026,7 @@ def showIP():
     for api_name in apis:
         print(api_name)
         try:
-            raw_ip = requests.get(apis[api_name], timeout=60).json()
+            raw_ip = requests.get(apis[api_name], timeout=30).json()
             ip = raw_ip['rawIspInfo']
             if len(ip) == 0:
                 ip = raw_ip
@@ -1048,7 +1048,6 @@ def github(get_config=None):
         elif get_config == 'p':
             print(users[0].split(',')[1])
         return
-    print('GitHub Start')
     showIP()
     updateRiskArea()
     post_day = getTime().strftime("%Y-%m-%d")

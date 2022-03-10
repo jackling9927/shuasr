@@ -2,7 +2,7 @@
 import sys
 
 from utils import abs_path, main, test, addUser, setSendMsgApi, github
-
+from gh_test import github_test
 
 if __name__ == '__main__':
     config = abs_path + '/config.yaml'
@@ -23,6 +23,8 @@ if __name__ == '__main__':
             github('u')
         elif sys.argv[1] == 'gh-vp':
             github('p')
+        elif sys.argv[1] == 'gh-test':
+            github_test()
         else:
             print('未定义的参数：%s' % sys.argv[1])
     else:

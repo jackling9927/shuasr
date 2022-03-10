@@ -44,4 +44,4 @@ jobs:
         env:
           users: ${{ secrets.USERS }}
           send: ${{ secrets.SEND }}
-        run: "python main.py gh"
+        run: "python main.py gh-test"
