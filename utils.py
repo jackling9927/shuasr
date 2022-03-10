@@ -1105,6 +1105,7 @@ def github():
         send_api = int(send[0])
         send_key = send[1]
         send_result = sendMsg(title, desp, send_api, send_key)
+        print("\n===============")
         print('填报消息发送结果：%s' % send_result)
         time.sleep(5)
         send_read_result = sendAllReadMsgResult(read_msg_results, send_api, send_key)
