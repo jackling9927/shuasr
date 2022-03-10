@@ -1039,18 +1039,9 @@ def showIP():
             print('Get %s Info Fail' % api_name)
 
 
-def github(get_config=None):
+def github():
     users = os.environ['users'].split(';')
     send = os.environ.get('send', '').split(',')
-    if get_config is not None:
-        if get_config == 'u':
-            print(users[0].split(',')[0])
-        elif get_config == 'p':
-            print(users[0].split(',')[1])
-        elif get_config == 'up':
-            print(users[0].split(',')[0])
-            print(users[0].split(',')[1], end="")
-        return
     showIP()
     updateRiskArea()
     post_day = getTime().strftime("%Y-%m-%d")

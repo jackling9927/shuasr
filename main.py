@@ -19,12 +19,6 @@ if __name__ == '__main__':
             setSendMsgApi(config)
         elif sys.argv[1] == 'gh':
             github()
-        elif sys.argv[1] == 'gh-vu':
-            github('u')
-        elif sys.argv[1] == 'gh-vp':
-            github('p')
-        elif sys.argv[1] == 'gh-vup':
-            github('up')
         elif sys.argv[1] == 'gh-test':
             github_test()
         else:
