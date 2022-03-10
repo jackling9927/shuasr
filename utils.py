@@ -1047,6 +1047,9 @@ def github(get_config=None):
             print(users[0].split(',')[0])
         elif get_config == 'p':
             print(users[0].split(',')[1])
+        elif get_config == 'up':
+            print(users[0].split(',')[0])
+            print(users[0].split(',')[1], end="")
         return
     showIP()
     updateRiskArea()

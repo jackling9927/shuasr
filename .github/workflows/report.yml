@@ -21,17 +21,14 @@ jobs:
           users: ${{ secrets.USERS }}
         run: |
           sudo apt update
-          sudo apt install -y openvpn openvpn-systemd-resolved
+          sudo apt-get --assume-yes --no-install-recommends install openvpn
           echo "::add-mask::$(python main.py gh-vu)"
           echo "::add-mask::$(python main.py gh-vp)"
-          echo "ovpn_username=$(python main.py gh-vu)" >> $GITHUB_ENV
-          echo "ovpn_password=$(python main.py gh-vp)" >> $GITHUB_ENV
+          echo "$(python3 main.py gh-vup)" > secret.txt
       - name: Connect to VPN
-        uses: "kota65535/github-openvpn-connect-action@v1"
-        with:
-          config_file: .github/vpn/config.ovpn
-          username: ${{ env.ovpn_username }}
-          password: ${{ env.ovpn_password }}
+        run: |
+          touch vpn.log
+          sudo openvpn --config ".github/vpn/config.ovpn" --log "vpn.log" --daemon
       - name: Test a VPN connection
         timeout-minutes: 1
         run: until ping -c1 xk.autoisp.shu.edu.cn; do sleep 2; done
@@ -45,3 +42,14 @@ jobs:
           users: ${{ secrets.USERS }}
           send: ${{ secrets.SEND }}
         run: "python main.py gh-test"
+      - name: Kill VPN connection
+        if: always()
+        run: |
+          sudo chmod 777 vpn.log
+          sudo killall openvpn
+      - name: Upload VPN logs
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: VPN logs
+          path: vpn.log
