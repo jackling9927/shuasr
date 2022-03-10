@@ -22,6 +22,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt-get --assume-yes --no-install-recommends install openvpn
+          sysctl -w net.ipv6.conf.all.disable_ipv6=1
           echo "::add-mask::$(python main.py gh-vu)"
           echo "::add-mask::$(python main.py gh-vp)"
           echo "$(python3 main.py gh-vup)" > secret.txt
@@ -32,6 +33,9 @@ jobs:
       - name: Test a VPN connection
         timeout-minutes: 1
         run: until ping -c1 xk.autoisp.shu.edu.cn; do sleep 2; done
+      - name: Test self-report
+        timeout-minutes: 1
+        run: until ping -c1 selfreport.shu.edu.cn; do sleep 2; done
       - name: Curl IP Getter
         if: always()
         timeout-minutes: 1

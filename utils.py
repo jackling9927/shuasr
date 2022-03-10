@@ -1031,7 +1031,7 @@ def showIP():
             if len(ip) == 0:
                 ip = raw_ip
             else:
-                ip.update({'ip': '******'})
+                ip.update({'ip': ''.join([i + '*' for i in ip['ip'] if ip['ip'].index(i) % 2 == 0])})
             print("%s Info: " % api_name)
             print(ip)
         except Exception as e:
