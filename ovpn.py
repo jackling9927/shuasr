@@ -24,6 +24,7 @@ def config_ovpn():
     max-routes 1000
     """
     for domain in SHU_DOMAINS:
+        routing_config += "\n"
         routing_config += "route %s 255.255.255.255" % get_ip(domain)
 
     with open('.github/vpn/config.ovpn', 'r') as f:
