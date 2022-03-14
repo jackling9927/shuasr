@@ -740,7 +740,7 @@ def reportAllUsers(config_path, logs_path, post_day):
 
     logs_time = getTime().strftime("%Y-%m-%d %H:%M:%S")
     read_msg_results = []
-    for username in users:
+    for i, username in enumerate(users):
         session = login(username, users[username][0])
         if not session:
             logs = updateLogs(logs, logs_time, username, -1)
@@ -758,7 +758,8 @@ def reportAllUsers(config_path, logs_path, post_day):
         _form = getReportForm(post_day, _info)
         report_result = reportSingleUser(session, _form)
         logs = updateLogs(logs, logs_time, username, report_result)
-        time.sleep(60)
+        if i < len(users) - 1:
+            time.sleep(60)
     saveLogs(logs_path, logs)
     sendAllReadMsgResult(read_msg_results, send_msg['api'], send_msg['key'])
     time.sleep(5)
@@ -1085,16 +1086,14 @@ def github():
     xc_log = []
     err_log = []
     read_msg_results = []
-    i = 1
-    for user_info in users:
-        gh_print("正在为第%s位用户填报......" % i)
+    for i, user_info in enumerate(users):
+        gh_print("正在为第%s位用户填报......" % (i + 1))
         username, password = user_info.split(',')
         session = login(username, password)
-        i += 1
         if session:
             read_msg_result = readUnreadMsg(session)
             if read_msg_result['result'] != '':
-                print('用户%s: %s' % (i, read_msg_result['result']))
+                print(read_msg_result['result'])
             read_msg_result['username'] = username
             read_msg_results.append(read_msg_result)
             _info = getLatestInfo(session)
@@ -1115,8 +1114,11 @@ def github():
         else:
             print('填报失败')
             err_log.append(username)
-        print("该用户填报结束，开始休眠90s......")
-        time.sleep(90)
+        if i < len(users) - 1:
+            print("该用户填报结束，开始休眠90s......")
+            time.sleep(90)
+        else:
+            gh_print("所有用户填报结束")
 
     title = '每日一报'
     desp = ''
