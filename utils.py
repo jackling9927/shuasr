@@ -72,21 +72,25 @@ def login(username, password, try_once=False):
             notice_url = 'https://selfreport.shu.edu.cn/DayReportNotice.aspx'
             view_msg_url = 'https://selfreport.shu.edu.cn/ViewMessage.aspx'
             if index.url == default_url and index.status_code == 200:
+                if '需要更新' in index.text:
+                    cleanIndex(session, index.text, 'cancel_archive_dialog', default_url, default_url)
                 return session
             elif index.url.startswith(view_msg_url):
                 view_times = 0
-                while view_times < 5:
+                while view_times < 10:
                     index = session.get(url=default_url)
                     view_times += 1
                     if index.url == default_url:
+                        print('阅读了%s条必读消息' % view_times)
                         return session
             elif index.url == notice_url:
-                if readNotice(session, index.text, notice_url, default_url):
+                if cleanIndex(session, index.text, 'read_notice', notice_url, default_url):
                     return session
             elif 'message.login.passwordError' in post_index.text:
                 print('用户密码错误')
                 return False
             else:
+                print('出现未知错误，历史记录调试信息：')
                 print([u.url for u in index.history] + [index.url])
         except Exception as e:
             print(e)
@@ -102,19 +106,35 @@ def login(username, password, try_once=False):
         time.sleep(60)
 
 
-def readNotice(session, notice_html, notice_url, index_url):
-    view_state = re.search(r'id="__VIEWSTATE" value="(.*?)" /', notice_html).group(1)
-    view_state_generator = re.search(r'id="__VIEWSTATEGENERATOR" value="(.*?)" /', notice_html).group(1)
-    form_data = {'__EVENTTARGET': 'p1$ctl01$btnSubmit',
-                 '__EVENTARGUMENT': '',
-                 '__VIEWSTATE': view_state,
-                 '__VIEWSTATEGENERATOR': view_state_generator,
-                 'F_TARGET': 'p1_ctl01_btnSubmit',
-                 'p1_ctl00_Collapsed': 'false',
-                 'p1_Collapsed': 'false',
-                 'F_STATE': 'eyJwMV9jdGwwMCI6eyJJRnJhbWVBdHRyaWJ1dGVzIjp7fX0sInAxIjp7IklGcmFtZUF0dHJpYnV0ZXMiOnt9fX0=',
-                 }
-    index = session.post(url=notice_url, data=form_data)
+def cleanIndex(session, html, target, target_url, index_url):
+    view_state = re.search(r'id="__VIEWSTATE" value="(.*?)" /', html).group(1)
+    view_state_generator = re.search(r'id="__VIEWSTATEGENERATOR" value="(.*?)" /', html).group(1)
+    form_data = {
+        '__VIEWSTATE': view_state,
+        '__VIEWSTATEGENERATOR': view_state_generator,
+    }
+    if target == 'read_notice':
+        form_data.update({
+            '__EVENTTARGET': 'p1$ctl01$btnSubmit',
+            '__EVENTARGUMENT': '',
+            'F_TARGET': 'p1_ctl01_btnSubmit',
+            'p1_ctl00_Collapsed': 'false',
+            'p1_Collapsed': 'false',
+            'F_STATE': 'eyJwMV9jdGwwMCI6eyJJRnJhbWVBdHRyaWJ1dGVzIjp7fX0sInAxIjp7IklGcmFtZUF0dHJpYnV0ZXMiOnt9fX0=',
+        })
+    elif target == 'cancel_archive_dialog':
+        form_data.update({
+            '__EVENTTARGET': '',
+            '__EVENTARGUMENT': 'EArchiveCancel',
+            'frmConfirm_ContentPanel1_Collapsed': 'false',
+            'frmConfirm_Collapsed': 'false',
+            'frmConfirm_Hidden': 'true',
+            'F_STATE': 'eyJmcm1Db25maXJtX0NvbnRlbnRQYW5lbDEiOnsiSUZyYW1lQXR0cmlidXRlF_STATEcyI6e319LCJmcm1Db25maXJtIjp'
+                       '7IklGcmFtZUF0dHJpYnV0ZXMiOnt9fX0=',
+        })
+    else:
+        return False
+    index = session.post(url=target_url, data=form_data)
     if index.url == index_url:
         return True
 
