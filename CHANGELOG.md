@@ -1,8 +1,8 @@
 # 更新日志
 
 ## [5.4.2] - 2022-03-20
-### Fixed
-- 修复 GitHub Actions 部分命令权限不足问题
+### Removed
+- 移除 GitHub Actions 工作流无用命令
 
 ## [5.4.1] - 2022-03-20
 ### Changed
