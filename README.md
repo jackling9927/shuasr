@@ -1,8 +1,10 @@
-![shuasr](https://tools.caduo.ml/shuasr-cover.php?v=20220208)
+![shuasr](https://tools.caduo.ml/shuasr-cover.php?v=20220325.3)
 
-> The program now supports automatic generation of **realistic** XingCheng codes and SuiShen codes.
-> 
-> The location information of the XingCheng code comes from the address in the SHU SelfReport system, and the green QR code in the SuiShen code is generated randomly each time.
+本项目可每天自动检测您是否已填报某校的每日一报，如果未填报，则可根据上次信息自动填报，并**提醒您下次不要忘记填报 : )**
+
+![remider](./img/remider.jpg)
+
+***项目仅供学习交流之用，请勿用于其它用途。请遵守当地防疫守则。***
 
 项目地址：<https://github.com/panghaibin/shuasr>
 
@@ -17,7 +19,7 @@
 
 - 自动获取最新一次填报信息进行上报，如需修改地址等信息，当天手动重新填报一次，程序下次填报将自动采用
 
-- 填报时可自动生成 XingCheng 码和 SuiShen 码
+- 填报时可根据实际情况，自动生成一些原本需要截屏的图片
 
 - 自动阅读所有消息，可通过消息推送接口推送必读消息
 
@@ -183,7 +185,7 @@ screen -r shu
 
 本项目在 2020 年初用 PHP 编写 ~~（为了抢排名第一）~~ ，返校后为了帮室友上报把源代码改得面目全非 ~~（传说中的屎山）（又不是不能用）~~ 。寒假离校后受下列开源项目启发，用 Python3 对 PHP 编写的源代码进行了重写重构。
 
-本项目仅供学习交流之用，请勿用于其它用途。请遵守当地防疫守则。
+***本项目仅供学习交流之用，请勿用于其它用途。请遵守当地防疫守则。***
 
 **Take care of yourself, and be well!**
 
